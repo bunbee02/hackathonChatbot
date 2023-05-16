@@ -52,7 +52,7 @@ def farming_practices_view(request, province_name, crop_name):
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerialilizer
+    serializer_class = ProductSerializer
 
 
 
