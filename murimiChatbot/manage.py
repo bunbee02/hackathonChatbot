@@ -4,6 +4,16 @@ import os
 import sys
 
 
+def province(province):
+  
+    return province
+
+
+
+
+
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'murimiChatbot.settings')
