@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-
+from rest_framework.views import APIView
+from . import datasets
 
 # Create your views here.
 from rest_framework import generics
 from .models import Product
 from .serializers import ProductSerializer
 from .serializers import farming_practices_view
-from .models import Province, Crop, FarmingPractice
+from .models import Province, Crop,Practice
 
 
 def farming_practices_view(request, province_name, crop_name):
@@ -61,3 +62,12 @@ class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerialilizer
     
 
+# class DatasetView(APIView):
+#     def get(self, request, format=None):
+#         # Load your dataset and convert it into Python objects
+#         dataset = load_dataset()
+        
+#         # Serialize the dataset
+#         serializer = DatasetSerializer(dataset, many=True)
+        
+#         return Response(serializer.data)

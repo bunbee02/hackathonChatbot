@@ -6,16 +6,18 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-class Province(models.Province):
+class Province(models.Model):
     name = models.CharField(max_length=100)
-   
     
+
+class Practice(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    
+    
+ 
     
 class Crop(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
-class FarmingPractice(models.Model):
-    province = models.ForeignKey(Province, on_delete=models.CASCADE)
-    crop = models.ForeignKey(Crop, on_delete=models.CASCADE)
-    practice = models.TextField()
