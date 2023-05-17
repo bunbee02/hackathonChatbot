@@ -2,8 +2,13 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.views import APIView
+from django.shortcuts import render, redirect
+from django.core.files.storage import default_storage
+import cv2
+import numpy as np
 import csv
 import os
+from PIL import Image
 from django.http import JsonResponse
 from . import datasets
 from django.conf import settings
@@ -16,7 +21,11 @@ from .serializers import ProductSerializer
 # from .models import Province, Crop,Practice
 from .models import info
 
+
 info =info
+from .models import CropDisease
+CropDisease =CropDisease
+
 
 
 # def farming_practices_view(request, province_name, crop_name):
@@ -113,3 +122,73 @@ def info_list(request):
             })
 
     return JsonResponse(combined_data, safe=False)
+
+
+
+
+def preprocess_image(image):
+    # Read the uploaded image using OpenCV
+    img = cv2.imdecode(image.read(), cv2.IMREAD_COLOR)
+
+    # Implement image preprocessing according to your requirements
+    # For example, resize the image to the desired width and height
+    width = 224  # Desired width
+    height = 224  # Desired height
+    resized_img = cv2.resize(img, (width, height))
+
+    # Perform any additional preprocessing steps if required
+    # ...
+
+    return resized_img
+
+def find_best_match(uploaded_image):
+    
+    dataset_path = 'path_to_your_dataset_folder'  # Specify the path of your dataset folder
+    dataset_images = os.listdir(dataset_path)
+
+    # Implement your image comparison algorithm to find the best match
+    best_match_filename = ""
+
+    # ...
+
+    return best_match_filename
+
+def match_image(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        uploaded_image = request.FILES['image']
+
+        # Save the uploaded image temporarily
+        image_path = default_storage.save('temp/' + uploaded_image.name, uploaded_image)
+        image_full_path = os.path.join(settings.MEDIA_ROOT, image_path)
+
+        # Preprocess the uploaded image
+        processed_image = preprocess_image(image_full_path)
+
+        # Compare the uploaded image with the dataset images
+        best_match_filename = find_best_match(processed_image)
+
+        # Render the result or return the best match filename
+        if best_match_filename:
+            context = {
+                'uploaded_image': uploaded_image,
+                'best_match_filename': best_match_filename,
+            }
+            return render(request, 'result.html', context)
+        else:
+            return JsonResponse({'error': 'No match found'})
+
+    return render(request, 'upload.html')
+
+def crop_disease_list(request):
+    crop_diseases = CropDisease.objects.all()
+    data = []
+
+    for crop_disease in crop_diseases:
+        data.append({
+            'crop': crop_disease.crop.name,
+            'disease': crop_disease.disease.name,
+            'description': crop_disease.description,
+            'image': crop_disease.image.url if crop_disease.image else None,
+        })
+
+    return JsonResponse(data, safe=False)

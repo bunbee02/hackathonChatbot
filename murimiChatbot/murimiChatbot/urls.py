@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from murimi.views import info_list
+
+from murimi.views import info_list, match_image, crop_disease_list
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('info/', info_list, name='list'),
+    path('info/', info_list, name='info_list'),
+    path('match-image/', match_image, name='match_image'),
+    path('crop-diseases/', crop_disease_list, name='crop_disease_list'),
 ]
