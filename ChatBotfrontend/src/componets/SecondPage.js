@@ -1,28 +1,52 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text, Button } from 'react-native';
 
 
 const styles = StyleSheet.create({
     container: {
-        margin: 0
-    //   flex: 1,
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    farmerImage: {
+      objectFit: 'contain',
+      width: '45%',
+    },
+
+    logoImage: {
+      objectFit: 'contain',
+      width: '16%',
+      // marginBottom: '5%'
+
     },
 
     mainText: {
-        fontSize:'30px'
+        fontSize:'28px',
+        fontWeight: 300,
+        marginBottom: '3%',
       },
 
     innerText: {
-        fontWeight: 500,
+        fontWeight:'bold',
+        fontSize: '28px',
       },
-    subText:{
-        fontSize: '16px',
-        fontWeight: 300,
-        color: 'red'
-    }  
+
+    // subText:{
+    //     fontSize: '15px',
+    //     fontWeight: 300,
+    //     textAlign: 'center',
+    //     paddingLeft: '15%',
+    //     paddingRight: '15%'
+    // }, 
+
+    buttton:{
+      fontSize: '55px',
+      color:'red',
+      backgroundColor:'red',
+      margin: '40%'
+  } 
   });
 
 
@@ -33,14 +57,21 @@ const styles = StyleSheet.create({
 function SecondPage() {
   return (
     <View style={styles.container}>
-    <Image source={require ('logo.svg')} />
-    <Image source={require ('Frame2.png')}/>  
-    <Text>
-        Meet 
-      <Text style={styles.innerText}>Murimi!</Text>
-    </Text>
-    <Text>Our Farming Assistant, ready and eager to support you on your agricultural journey.</Text>
-    <StatusBar style="auto" />
+        <Image style={styles.logoImage} source={require ('../../assets/Frame2.png')}/> 
+        <Image style={styles.farmerImage} source={require ('../../assets/farmer.png')} />
+        <Text style={styles.mainText}>
+            Meet  
+          <Text style={styles.innerText}> Murimi!</Text>
+        </Text>
+        <Text style={styles.subText}>Our Farming Assistant, ready and eager to support you on your agricultural journey.</Text>
+        <Button   
+          style={styles.buttton}
+          title="Get Started"
+          // backgroundColor = '#4A682C'
+          color='red'
+          onPress={() => console.log('Button clicked')}
+        />
+        <StatusBar style="auto" />
     </View>
   );
 }

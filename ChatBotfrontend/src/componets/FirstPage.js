@@ -3,9 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Image, View } from 'react-native';
 
  function FirstPage() {
+
   return (
     <View style={styles.container}>
-    <Image source={require ('./assets/Frame.png')}
+    <Image source={require ('../../assets/Frame.png')}
       // style={{width: 80}}
       />
    
