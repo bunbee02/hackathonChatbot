@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from murimi.views import info_list
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+     path('info/', info_list, name='list'),
 ]

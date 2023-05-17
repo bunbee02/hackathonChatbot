@@ -1,12 +1,12 @@
-# from django.shortcuts import get_object_or_404
-# from django.http import JsonResponse
-# from rest_framework import serializers
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from rest_framework import serializers
 
 
-# # from rest_frameworks import serializers
-# from rest_framework import serializers
-# from .models import Product
-# from .models import Province, Crop, FarmingPractice
+# from rest_frameworks import serializers
+from rest_framework import serializers
+from .models import Product
+from .models import Province, Crop
 
 
 
@@ -26,10 +26,10 @@
 #     except (Province.DoesNotExist, Crop.DoesNotExist):
 #         return JsonResponse({'error': 'Province or crop not found'}, status=404)
 
-# class ProductSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Product
-#         fields = ['id', 'name', 'description', 'price']
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'price']
         
         
 

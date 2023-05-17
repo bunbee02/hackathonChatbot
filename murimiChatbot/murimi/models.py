@@ -21,3 +21,9 @@ class Crop(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
 
+class info(models.Model):
+    temperature = models.IntegerField()
+    humidity = models.IntegerField()
+    ph = models.IntegerField()
+    rainfall = models.IntegerField()
+    label = models.CharField(max_length=100)
