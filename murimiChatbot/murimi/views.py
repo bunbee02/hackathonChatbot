@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from django.conf import settings
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -188,7 +190,6 @@ def evaluate_model(X, y):
 
 
 
-
 def info_list(request):
     # Fetch data from the info table
     info_queryset = info.objects.all()
@@ -230,7 +231,6 @@ def info_list(request):
         return JsonResponse({'error': 'Insufficient data samples for clustering'})
 
     return JsonResponse(serialized_data, safe=False)
-
 
 
 
