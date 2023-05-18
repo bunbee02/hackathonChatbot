@@ -1,30 +1,29 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
 from django.http import JsonResponse
-from rest_framework.views import APIView
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from rest_framework import serializers
+from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
+from rest_framework.views import APIView
+from sklearn.cluster import KMeans
 import cv2
+import json
 import numpy as np
 import csv
 import os
 from PIL import Image
-from django.http import JsonResponse
 from . import datasets
 from django.conf import settings
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
 
 # Create your views here.
 from rest_framework import generics
-from .models import Product
-from .serializers import ProductSerializer
-# from .serializers import farming_practices_view
-# from .models import Province, Crop,Practice
-from .models import info
+from .models import Product, info, CropDisease
+from .serializers import ProductSerializer, InfoSerializer
 
-
-info =info
-from .models import CropDisease
-CropDisease =CropDisease
 
 
 
@@ -89,22 +88,119 @@ class ProductRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 #         return Response(serializer.data)
 
 
+
+
+# def info_list(request):
+#     # Fetch data from the info table
+#     info_queryset = info.objects.all()
+
+#     # Prepare combined data
+#     combined_data = []
+
+#     # Add data from the info table
+#     for information in info_queryset:
+#         combined_data.append({
+#             'label': information.label,
+#             'humidity': float(information.humidity),
+#             'ph': float(information.ph),
+#             'rainfall': float(information.rainfall),
+#             'temperature': float(information.temperature),
+#         })
+
+#     # Get the path to the CSV file
+#     csv_file_path = os.path.join(os.path.dirname(__file__), 'info.csv')
+
+#     # Read data from the CSV file
+#     with open(csv_file_path, 'r') as file:
+#         csv_reader = csv.DictReader(file)
+#         for row in csv_reader:
+#             combined_data.append({
+#                 'label': row['label'],
+#                 'humidity': float(row['humidity']),
+#                 'ph': float(row['ph']),
+#                 'rainfall': float(row['rainfall']),
+#                 'temperature': float(row['temperature']),
+#             })
+
+#     # Perform clustering
+#     data = np.array([
+#         [d['humidity'], d['ph'], d['rainfall'], d['temperature']]
+#         for d in combined_data
+#     ])
+#     kmeans = KMeans(n_clusters=3)
+#     kmeans.fit(data)
+
+#     # Get the cluster labels assigned by the algorithm
+#     cluster_labels = kmeans.labels_.tolist()  # Convert to list
+
+#     # Assign labels to the clusters
+#     cluster_names = {
+#         0: "Wheat",
+#         1: "Rice",
+#         2: "Corn"
+#     }
+
+#     # Prepare the data with assigned cluster labels and names
+#     clustered_data = []
+#     for i, label in enumerate(cluster_labels):
+#         d = combined_data[i]
+#         d['cluster_label'] = label
+#         d['cluster_name'] = cluster_names[label]
+#         clustered_data.append(d)
+
+#     return JsonResponse(clustered_data, safe=False)
+
+def train_model(data):
+    # Prepare the data for training
+    X = np.array([[d['humidity'], d['ph'], d['rainfall'], d['temperature']] for d in data])
+
+    # Perform K-means clustering
+    k = 3  # Number of clusters
+    if len(X) >= k:
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(X)
+
+        # Get the cluster labels
+        labels = kmeans.labels_
+
+        # Add the cluster labels to the data
+        for i, d in enumerate(data):
+            d['cluster'] = int(labels[i])  # Convert to regular integer
+    else:
+        raise ValueError('Insufficient data samples for clustering')
+
+    return data
+
+
+def evaluate_model(X, y):
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the model
+    trained_model = train_model(X_train)
+
+    # Evaluate the model on the test set
+    y_pred = [d['cluster'] for d in trained_model]
+    accuracy = accuracy_score(y_test, y_pred)
+
+    return accuracy
+
+
+
+
+
 def info_list(request):
     # Fetch data from the info table
     info_queryset = info.objects.all()
 
-    # Prepare combined data
-    combined_data = []
+    # Serialize the data from the Django table
+    serializer = InfoSerializer(info_queryset, many=True)
+    serialized_data = serializer.data
 
-    # Add data from the info table
-    for information in info_queryset:
-        combined_data.append({
-            'label': information.label,
-            'humidity': information.humidity,
-            'ph': information.ph,
-            'rainfall': information.rainfall,
-            'temperature': information.temperature,
-        })
+    # Prepare the data for clustering
+    data = []
+    for item in serialized_data:
+        data.append([item['temperature'], item['humidity'], item['ph'], item['rainfall']])
 
     # Get the path to the CSV file
     csv_file_path = os.path.join(os.path.dirname(__file__), 'info.csv')
@@ -113,15 +209,27 @@ def info_list(request):
     with open(csv_file_path, 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
-            combined_data.append({
-                'label': row['label'],
-                'humidity': row['humidity'],
-                'ph': row['ph'],
-                'rainfall': row['rainfall'],
-                'temperature': row['temperature'],
-            })
+            data.append([float(row['temperature']), float(row['humidity']), float(row['ph']), float(row['rainfall'])])
 
-    return JsonResponse(combined_data, safe=False)
+    # Perform K-means clustering
+    k = 3  # Number of clusters
+    if len(data) >= k:
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(data)
+
+        # Get the cluster labels
+        labels = kmeans.labels_
+
+        # Convert cluster labels to regular Python integers
+        labels = [int(label) for label in labels]
+
+        # Add the cluster labels to the serialized data
+        for i, item in enumerate(serialized_data):
+            item['cluster'] = labels[i]
+    else:
+        return JsonResponse({'error': 'Insufficient data samples for clustering'})
+
+    return JsonResponse(serialized_data, safe=False)
 
 
 

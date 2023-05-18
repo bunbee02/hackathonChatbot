@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework import serializers
 from .models import Product
 from .models import Province, Crop
+from .models import info
 
 
 
@@ -30,7 +31,12 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'price']
-        
+  
+  
+class InfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = info
+        fields = ['label', 'humidity', 'ph', 'rainfall', 'temperature']      
         
 
 # class DatasetSerializer(serializers.Serializer):
