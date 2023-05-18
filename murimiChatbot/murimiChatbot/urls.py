@@ -17,8 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from murimi.views import ProductListCreateView, ProductRetrieveUpdateDestroyView
 
+
+from murimi.views import info_list, match_image, crop_disease_list
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('products/', ProductListCreateView.as_view(), name='product-list-create'),
-    path('products/<int:pk>/', ProductRetrieveUpdateDestroyView.as_view(), name='product-retrieve-update-destroy')
+    path('info/', info_list, name='info_list'),
+    path('match-image/', match_image, name='match_image'),
+    path('crop-diseases/', crop_disease_list, name='crop_disease_list'),
+    path('bot', include)
 ]
