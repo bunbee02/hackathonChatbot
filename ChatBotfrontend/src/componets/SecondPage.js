@@ -33,18 +33,18 @@ const styles = StyleSheet.create({
         fontSize: '28px',
       },
 
-    // subText:{
-    //     fontSize: '15px',
-    //     fontWeight: 300,
-    //     textAlign: 'center',
-    //     paddingLeft: '15%',
-    //     paddingRight: '15%'
-    // }, 
+    subText:{
+        fontSize: '15px',
+        fontWeight: 300,
+        textAlign: 'center',
+        paddingLeft: '15%',
+        paddingRight: '15%'
+    }, 
 
     buttton:{
       fontSize: '55px',
       color:'red',
-      backgroundColor:'red',
+      backgroundColor:'blue',
       margin: '40%'
   } 
   });
@@ -68,7 +68,7 @@ function SecondPage() {
           style={styles.buttton}
           title="Get Started"
           // backgroundColor = '#4A682C'
-          color='red'
+          color='#4A682C'
           onPress={() => console.log('Button clicked')}
         />
         <StatusBar style="auto" />
