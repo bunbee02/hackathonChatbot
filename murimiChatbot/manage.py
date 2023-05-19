@@ -1,13 +1,17 @@
+
 #!/usr/bin/env python3
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
 
+<<<<<<< HEAD
 def province(province):
   
     return province
 
+=======
+>>>>>>> 61611b9aa440fbb73754524b3ff562df6954247f
 
 
 
