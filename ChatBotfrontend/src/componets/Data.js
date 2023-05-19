@@ -50,10 +50,6 @@ export const   data = [
       innerHeight:'95%',
       icon: require("../../assets/irrigation.png"),
       textttt: 'Crop Irrigationnnnnnnnn',
-
-
-
-
     },
     {
       id: "6",
@@ -66,33 +62,38 @@ export const   data = [
       data: 'Crop Irrigation',
 
 
-
-
-
     },
 ];
 
 
-export const modalData = [
+export const marketData = [
   {
-    image : require("../../assets/cropmarketing.png"),
-    text: 'Crop Marketing',
-    subText: 'Tap to chat',
-    height:'90%',
-    innerHeight:'90%',
-    icon: require("../../assets/marketing.png"),
+    image : require("../../assets/market1.png"),
   },
 
   {
-    image : require("../../assets/cropirrigation.png"),
-    text: 'Crop Irrigation',
-    subText: 'Tap to chat',
-    height:'100%',
-    innerHeight:'100%',
-    icon: require("../../assets/irrigation.png"),
+    image : require("../../assets/market2.png"),
 
+  },
 
+  {
+    image : require("../../assets/market3.png"),
+  },
+
+  {
+    image : require("../../assets/market4.png"),
+
+  },
+
+  {
+    image : require("../../assets/market5.png"),
+  },
+
+  {
+    image : require("../../assets/market6.png"),
 
   },
 
 ]
+
+

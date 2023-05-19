@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, Button } from "react-native";
 import {data} from './Data';
-import TalkToMurimiButton from './Button'
-import { SvgXml } from "react-native-svg";
+import TalkToMurimiButton from './MurimiButton';
+import HomeIcons from "./HomeIcons";
 
 const homeIcon = `../../assets/home.svg`;
 const marketIcon = `../../assets/market.svg`;
@@ -11,16 +11,16 @@ const settingsIcon = `../../assets/settings.svg`;
 
 const ThirdPage = () => {
 
+  const [showModal, setShowModal] = useState(false);
+
   const handleImageClick = (text) => {
     setShowModal( !showModal);
     ;
   };
 
-  const [showModal, setShowModal] = useState(null);
 
   return (
     <View>
-
     <Text style={styles.mainHeading}>Hi, How may l be of assistance today?</Text>
     <View style={styles.container}>
       {data.map((item, index) => (
@@ -41,59 +41,64 @@ const ThirdPage = () => {
               isOpen={index === showModal}
               animationType={'fade'}
               transparent={false}
-              onRequestClose={() => setShowModal(null)}
+              onRequestClose={() => setShowModal(false)}
               visible={showModal}
             >
-              <Text>{item.texttt}</Text>
+              <View style={styles.modalText}>
+                <View>
+                  <Image source={item.image} style={styles.flexImage}/>
+                  <View style={styles.flexItems}>
+                    <Image source={item.icon} style={styles.flexIcon} />
+                    <Text style={styles.flexText} >{item.text}</Text>
+                  </View>
+                  <View style={styles.flexContent}>
+                <Text style={styles.flexHeading}>About</Text>
+                
+                <Text style={styles.flexSubtext}>
+             
+                Soil preparation is a crucial step in gardening and 
+                agriculture that involves getting the soil ready for 
+                planting or seeding.  
+                {"\n"}
+                {"\n"}
+                    Here's a summary of soil preparation:
+                    {"\n"}
+                    1. Clearing the Area:
+                    {"\n"}
+                    2. Soil Testing
+                    {"\n"}
+                    3. Soil Aeration
+                    {"\n"}
+                    4. Organic Matter Addition
+                    {"\n"}
+                    5. Soil Amendments
+                    {"\n"}
+                    6. Weed Control
+                    {"\n"}
+                    7. Leveling and Smoothing
+                    {"\n"}
+                    8. Irrigation Preparation
 
+                          For more information
+                </Text>
+                <TalkToMurimiButton/>
+
+                </View>
+                </View>
+              </View>
               <Button
-                title="Click To Close Modal"
+                style={styles.flexButton}
+                title="Back"
                 onPress={() => {
-                  setShowModal(!showModal);
+                  setShowModal(false);
                 }}
               />            
           </Modal>
         </TouchableOpacity>
       ))}
       <TalkToMurimiButton/>
-
-      <View style={styles.iconsContainer} >
-        <TouchableOpacity style={styles.iconContainer} >
-        <Image source={require('../../assets/home.png')}/>
-          <Text>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconContainer}>
-        <Image source={require('../../assets/market.png')}/>
-          <Text style={styles.iconText}>Market</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconContainer}>
-        <Image source={require('../../assets/settings.png')}/>
-          <Text style={styles.iconText}>Settings</Text>
-        </TouchableOpacity>
-      </View>
+      <HomeIcons/>
       <View style={styles.greenBorder} /> 
-{/* 
-        <Modal
-          isOpen={i === showModal}
-          animationType={'fade'}
-          transparent={false}
-          visible={showModal}
-          onRequestClose={() => setShowModal(null)}>
-
-          <View style={styles.modal}>
-          {modalData.map((modalData, i) => (
-           <View>
-              <Text style={styles.text}>{modalData.text}</Text>
-              <Button
-                title="Click To Close Modal"
-                onPress={() => {
-                  setShowModal(!showModal);
-                }}
-              />
-            </View>
-      ))}      
-          </View>
-        </Modal> */}
 
     </View>
     </View>
@@ -109,9 +114,60 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     paddingHorizontal: 22,
-    // paddingTop: 50,
     position: 'relative'
-    
+  },
+
+  flexItems:{
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position:'absolute',
+    paddingLeft:50,
+    paddingTop:50
+  },
+  flexContent:{
+    marginLeft:10,
+    backgroundColor:'white',
+    width:'95%',
+    paddingTop:10,
+    paddingLeft:20,
+    paddingRight:20,
+    paddingBottom:50,
+    bottom:18,
+  },
+  flexHeading:{
+    fontWeight:500,
+    fontSize:18,
+    color:'black',
+  },
+  flexSubtext:{
+    color:'#545454',
+    fontSize:14,
+    lineHeight:20
+  },
+  flexImage:{
+    height:180,
+    width:'95%',
+    borderRadius: 20,
+    marginLeft:10
+
+  },
+
+  flexText:{
+    fontSize: 24,
+    color: 'white',
+    paddingLeft:20
+  },
+
+  modalText:{
+    paddingTop:40,
+    width:'100%',
+    display:'flex',
+  },
+  flexIcon:{
+    width:50,
+    height:50,
+    resizeMode: "cover",
   },
 
   imageContainer: {
@@ -179,7 +235,8 @@ const styles = StyleSheet.create({
 
   iconContainer: {
     display : "flex",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    // alignItems: "flex-start",
     flexWrap : "nowrap",
     width: 100,
   }

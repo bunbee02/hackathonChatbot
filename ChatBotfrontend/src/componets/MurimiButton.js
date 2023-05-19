@@ -1,11 +1,16 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image,Linking } from 'react-native';
 // import { Ionicons } from '@expo/vector-icons';
 
 const TalkToMurimiButton = () => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity 
+      style={styles.button}
+      onPress={() => {
+        Linking.openURL('https://wa.me/+14155238886');
+      }}
+      >
         <Text style={styles.buttonText}>Talk to Murimi</Text>
         <Image source={require ('../../assets/Layer.png')}
       // style={{width: 80}}
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     width: 326,
     height: 43,
     justifyContent: 'center',
-    marginTop: 8
+    marginTop: 8,
   },
   buttonText: {
     color: '#4A682C',
