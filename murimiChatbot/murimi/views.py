@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
 from django.core.files.storage import default_storage
@@ -10,7 +10,7 @@ import csv
 import os
 from PIL import Image
 from django.http import JsonResponse
-from . import datasets
+# from . import datasets
 from django.conf import settings
 
 # Create your views here.
@@ -20,12 +20,30 @@ from .serializers import ProductSerializer
 # from .serializers import farming_practices_view
 # from .models import Province, Crop,Practice
 from .models import info
+from twilio.rest import Client
+from django.views.decorators.csrf import csrf_exempt
 
 
 info =info
 from .models import CropDisease
 CropDisease =CropDisease
 
+account_sid = 'AC37cebed5e43eb81f4c0345dda4da8a4d'
+auth_token = '337348d00cd743158b37ac536c4fa7d9'
+client = Client(account_sid, auth_token)
+
+@csrf_exempt
+def bot(request): 
+    message = request.POST(message)
+
+    if message == 'hi':
+        client.messages.create(
+           from_='whatsapp:+14155238886',
+           body='Welcome to Murimi bot please select the region you are coming',
+           to='whatsapp:+263713872372'
+        )
+
+    return HttpResponse("hello")
 
 
 # def farming_practices_view(request, province_name, crop_name):
@@ -192,3 +210,21 @@ def crop_disease_list(request):
         })
 
     return JsonResponse(data, safe=False)
+
+account_sid = 'AC37cebed5e43eb81f4c0345dda4da8a4d'
+auth_token = '337348d00cd743158b37ac536c4fa7d9'
+client = Client(account_sid, auth_token)
+
+@csrf_exempt
+def bot(request): 
+    message = request.POST['message']
+    # message = ''
+
+    if message == 'hi':
+        client.messages.create(
+           from_='whatsapp:+14155238886',
+           body='Welcome to Murimi bot please select the region you are coming',
+           to='whatsapp:+263713872372'
+        )
+
+    return HttpResponse("hello")
