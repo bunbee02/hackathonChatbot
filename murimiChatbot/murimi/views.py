@@ -12,6 +12,7 @@ from PIL import Image
 from django.http import JsonResponse
 # from . import datasets
 from django.conf import settings
+from twilio.base.exceptions import TwilioRestException
 
 # Create your views here.
 from rest_framework import generics
@@ -23,6 +24,10 @@ from .models import info
 from twilio.rest import Client
 from django.views.decorators.csrf import csrf_exempt
 
+account_sid = 'AC37cebed5e43eb81f4c0345dda4da8a4d'
+auth_token = '104ba6f60c47dcdbaf0291e03d7f219d'
+client = Client(account_sid, auth_token)
+
 
 info =info
 from .models import CropDisease
@@ -32,18 +37,24 @@ account_sid = 'AC37cebed5e43eb81f4c0345dda4da8a4d'
 auth_token = '337348d00cd743158b37ac536c4fa7d9'
 client = Client(account_sid, auth_token)
 
-@csrf_exempt
-def bot(request): 
-    message = request.POST(message)
+# @csrf_exempt
+# def bot(request): 
+#     print(request.POST.get('Body', ''))
+    # message = request.POST['Body']
+    # print(request)
+    # print(message)
+    # if (message == 'hi'):
+    #     try: 
+    #         print(message)
+    #         client.messages.create(
+    #         from_='whatsapp:+14155238886',
+    #         body='Welcome to Murimi bot please select the region you are coming',
+    #         to='whatsapp:+263713872372'
+    #         )
+    #     except TwilioRestException as ex: 
+    #         print(ex)
 
-    if message == 'hi':
-        client.messages.create(
-           from_='whatsapp:+14155238886',
-           body='Welcome to Murimi bot please select the region you are coming',
-           to='whatsapp:+263713872372'
-        )
-
-    return HttpResponse("hello")
+    # return HttpResponse("hello")
 
 
 # def farming_practices_view(request, province_name, crop_name):
@@ -211,20 +222,21 @@ def crop_disease_list(request):
 
     return JsonResponse(data, safe=False)
 
-account_sid = 'AC37cebed5e43eb81f4c0345dda4da8a4d'
-auth_token = '337348d00cd743158b37ac536c4fa7d9'
-client = Client(account_sid, auth_token)
+
 
 @csrf_exempt
 def bot(request): 
-    message = request.POST['message']
+    prompt = request.POST["Body"]
+    # sender_name = request.POST['ProfileName']
     # message = ''
+    print(prompt)
 
-    if message == 'hi':
-        client.messages.create(
+    if prompt == 'hi':
+     message= client.messages.create(
            from_='whatsapp:+14155238886',
            body='Welcome to Murimi bot please select the region you are coming',
            to='whatsapp:+263713872372'
         )
-
+    # print(message.sid)
     return HttpResponse("hello")
+   

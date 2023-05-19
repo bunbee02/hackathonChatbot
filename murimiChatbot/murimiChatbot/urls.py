@@ -27,5 +27,5 @@ urlpatterns = [
     path('info/', info_list, name='info_list'),
     path('match-image/', match_image, name='match_image'),
     path('crop-diseases/', crop_disease_list, name='crop_disease_list'),
-    path('bot/', bot, name='bot')
+    path('', bot, name='bot')
 ]
